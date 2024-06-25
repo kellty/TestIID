@@ -28,6 +28,21 @@ library(doParallel)
 cl <- makeCluster(100) # detectCores()
 registerDoParallel(cl)
 
+power_exch <- NULL
+set.seed(101)
+x_pop <- t(sapply(1:1e5, function(i) rep(i*1e-2,p) + rnorm(p)))
+for(n in n_list) for(method in m_list) {
+  t0 <- proc.time()[3]
+  pval <- foreach(mc=1:MC, .combine=c) %dopar% {
+    set.seed(999+(mc+55)^2)
+    x <- x_pop[sample(1e5,n,replace=TRUE),]
+    iid_pval(x,method)
+  }
+  pow <- mean(pval<0.05)
+  power_exch[[method]] <- c(power_exch[[method]], pow)
+  iid_result("exchangeable", method, pow, t0)
+}
+save(power_exch, file="power_exch.RData")
 
 power_mean <- NULL
 for(n in n_list) for(method in m_list) {

@@ -52,22 +52,3 @@ for (x in mydata) {
   print(rej)
 }
 
-cl <- makeCluster(50)
-registerDoParallel(cl)
-N <- c(1e3,2e3,4e3,7e3,1e4,1.5e4,2e4,3e4,5e4)
-pow <- NULL
-for (N_ in N) {
-  pval <- foreach(mc=1:1000) %dopar% {
-    set.seed(mc^2)
-    sup_test(mnist$train$images[sample(N_,100,replace=TRUE),],
-             function(x1,x2){ 1 / (sum((x1 - x2)^2)^2 + 1) })
-  }
-  pow <- c(pow, mean(pval<0.05))
-}
-stopCluster(cl)
-setEPS()
-postscript('power_mnist.eps', width=8, height=4)
-# png('power_mnist.png', width=600, height=300)
-plot(N, pow, type='b', log='x', lwd=2, ylim=c(0,1), xlab="population size", ylab="rejection proportion")
-dev.off()
-
