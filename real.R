@@ -11,6 +11,10 @@ iid_pval <- function(x) {
 
 mydata <- NULL
 
+air <- as.matrix(read.csv("PRSA_Data_Aotizhongxin_20130301-20170228.csv"))
+air <- air[rowSums(is.na(air))==0,]
+mydata[['air']] <- apply(air[1:400,6:11], 2, as.numeric)
+
 # library(dslabs)
 # mnist <- read_mnist()
 load("mnist.RData")
@@ -30,25 +34,4 @@ mydata[['email']] <- t(apply(email$Xt, 4, c))
 
 set.seed(1234)
 print(sapply(mydata, iid_pval))
-
-
-library(foreach)
-library(doParallel)
-
-for (x in mydata) {
-  n <- nrow(x)
-  rej <- 0
-  for (M in 0:49) {
-    gc()
-    cl <- makeCluster(20)
-    registerDoParallel(cl)
-    pvals <- foreach(mc=M*20+(1:20), .combine=rbind) %dopar% {
-      set.seed((618+mc)^2)
-      iid_pval(x[sample(n,replace=TRUE),])
-    }
-    stopCluster(cl)
-    rej <- rej + colSums(pvals<0.05)
-  }
-  print(rej)
-}
 
