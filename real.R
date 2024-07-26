@@ -17,11 +17,12 @@ mydata[['air']] <- apply(air[1:400,6:11], 2, as.numeric)
 
 # library(dslabs)
 # mnist <- read_mnist()
+# mnist <- mnist$train$images[1:800,]
 load("mnist.RData")
-mydata[['mnist']] <- mnist$train$images[1:800,]
+mydata[['mnist']] <- mnist[1:800,]
 mnist_v <- matrix(nrow=800, ncol=28)
 for (i in 1:800) {
-  mnist_v[i,] <- svd(matrix(mnist$train$images[i,],nrow=28))$u[,1]
+  mnist_v[i,] <- svd(matrix(mnist[i,],nrow=28))$u[,1]
 }
 mydata[['mnist_v']] <- mnist_v
 
