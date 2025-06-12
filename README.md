@@ -10,4 +10,4 @@ The MNIST dataset from [http://yann.lecun.com/exdb/mnist/](http://yann.lecun.com
 
 ## Workflow
 - Simulation: Make sure that "***func.R***" is in the working directory, and *then* run "***simu.R***".
-- Real data analysis: Make sure that "***func.R***", "***Delete PRSA_Data_Aotizhongxin_20130301-20170228.csv***", "***mnist.RData***", "***Data_email.mat***" and "***Data_financial.mat***" are in the working directory, and *then* run "***real.R***".
+- Real data analysis: Make sure that "***func.R***", "***PRSA_Data_Aotizhongxin_20130301-20170228.csv***", "***mnist.RData***", "***Data_email.mat***" and "***Data_financial.mat***" are in the working directory, and *then* run "***real.R***".
